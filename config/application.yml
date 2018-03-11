@@ -1,0 +1,44 @@
+spring:
+    application:
+        name: pp-server
+    profiles: 1
+server:
+   port: 8801
+   
+eureka:
+   instance:
+     hostname: localhost
+     instance-id: ${spring.application.name}:${server.port}
+   client:
+     healthcheck:
+       enabled:true
+     serviceUrl:
+       defaultZone: http://s1:8802/eureka
+   server:
+     enable-self-preservation:false#关闭保护机制（缺省为打开）
+     eviction-interval-timer-in-ms:10000       # 续期时间，即扫描失效服务的间隔时间（缺省为60*1000ms）
+
+endpoints.shutdown.enabled: true    #开启优雅关闭方式
+management.security.enabled: false  #关闭安全认证
+---
+spring:
+    application:
+        name: pp-server
+    profiles: 2
+server:
+   port: 8802
+eureka:
+   instance:
+     hostname: localhost
+     instance-id: ${spring.application.name}:${server.port}
+   client:
+     healthcheck:
+       enabled:true
+     serviceUrl:
+       defaultZone: http://s2:8801/eureka
+   server:
+     enable-self-preservation:false#关闭保护机制（缺省为打开）
+     eviction-interval-timer-in-ms:1000       # 续期时间，即扫描失效服务的间隔时间（缺省为60*1000ms）
+
+endpoints.shutdown.enabled: true    #开启优雅关闭方式
+management.security.enabled: false  #关闭安全认证
